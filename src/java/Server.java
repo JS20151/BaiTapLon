@@ -2,7 +2,6 @@ package java;
 
 import java.io.*;
 import java.net.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Server {
@@ -77,7 +76,7 @@ public class Server {
 		for (int i = al.size(); --i >= 0;) {
 			ClientThread ct = al.get(i);
 
-			if (!ct.writeMsg(new ChatMessage(message.getType(), messageLf))) {
+			if (!ct.writeMsg(new ChatMessage(message.getType(), messageLf, message.getNumber()))) {
 				al.remove(i);
 				display("Disconnected Client " + ct.username + " removed from list.");
 			}
@@ -151,29 +150,18 @@ public class Server {
 				switch (cm.getType()) {
 
 				case ChatMessage.MESSAGE:
-					broadcast(new ChatMessage(ChatMessage.MESSAGE, username + ": " + message));
+					broadcast(new ChatMessage(ChatMessage.MESSAGE, username + ": " + message, 0));
 					break;
 				case ChatMessage.LOGOUT:
-					broadcast(new ChatMessage(ChatMessage.STOP, ""));
+					broadcast(new ChatMessage(ChatMessage.MESSAGE, "", 0));
 					display(username + " disconnected with a LOGOUT message.");
 					keepGoing = false;
 					break;
 				case ChatMessage.START:
-					broadcast(new ChatMessage(ChatMessage.MESSAGE, "Player Connected:"));
-
-					for (int i = 0; i < al.size(); ++i) {
-						ClientThread ct = al.get(i);
-						broadcast(new ChatMessage(ChatMessage.MESSAGE, (i + 1) + ": " + ct.username));
-					}
-					if (al.size() > 1)
-						broadcast(new ChatMessage(ChatMessage.START, ""));
+					broadcast(new ChatMessage(ChatMessage.START, "", 0));
 					break;
 				case ChatMessage.NUMBER:
-					broadcast(new ChatMessage(ChatMessage.NUMBER, message));
-					broadcast(new ChatMessage(ChatMessage.MESSAGE, username + " selected number " + message));
-					break;
-				case ChatMessage.WIN:
-					broadcast(new ChatMessage(ChatMessage.MESSAGE, username + " is winner"));
+					broadcast(new ChatMessage(ChatMessage.NUMBER, "", 3));
 					break;
 
 				}

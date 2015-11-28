@@ -1,5 +1,6 @@
 package java;
 
+
 import java.net.*;
 import java.io.*;
 import java.util.*;
@@ -108,7 +109,7 @@ public class Client  {
 					if (msg.getType() == ChatMessage.STOP)
 						cg.GameDisable();
 					if (msg.getType() == ChatMessage.NUMBER){
-						cg.ButtonSelected(msg.getMessage());
+						cg.ButtonSelected(msg.getNumber());
 					}
 				}
 				catch(IOException e) {
