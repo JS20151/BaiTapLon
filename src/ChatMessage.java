@@ -1,36 +1,31 @@
-package hoangdoan.me.pingo;
-
 
 import java.io.*;
-/*
- * This class defines the different type of messages that will be exchanged between the
- * Clients and the Server. 
- * When talking from a Java Client to a Java Server a lot easier to pass Java objects, no 
- * need to count bytes or to wait for a line feed at the end of the frame
- */
+
 public class ChatMessage implements Serializable {
 
 	protected static final long serialVersionUID = 1112122200L;
 
-	// The different types of message sent by the Client
-	// WHOISIN to receive the list of the users connected
-	// MESSAGE an ordinary message
-	// LOGOUT to disconnect from the Server
-	static final int START = 0, MESSAGE = 1, LOGOUT = 2, STOP = 3, NUMBER =4, WIN = 5;
+	
+	static final int START = 0, MESSAGE = 1, LOGOUT = 2, STOP = 3, NUMBER =4, BINGO = 5, LOGIN =6;
 	private int type;
 	private String message;
+	private int number;
 	
-	// constructor
-	ChatMessage(int type, String message) {
+	
+	ChatMessage(int type, String message,int number) {
 		this.type = type;
 		this.message = message;
+		this.number = number;
 	}
-	// getters
+	
 	int getType() {
 		return type;
 	}
 	String getMessage() {
 		return message;
+	}
+	int getNumber() {
+		return number;
 	}
 }
 

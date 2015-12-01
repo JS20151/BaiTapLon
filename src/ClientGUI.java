@@ -1,4 +1,3 @@
-package hoangdoan.me.pingo;
 
 
 import java.awt.BorderLayout;
@@ -16,54 +15,53 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class ClientGUI extends JFrame implements ActionListener {
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	static JButton button[][];
-	int[][] x = new int[5][5];
+	int[][] x = new int[10][10];
 	private JTextArea save;
 	JLabel labelTime;
 	JLabel labelPoint;
 	private JLabel labelName, labelPort;
 	private JTextField txtChat, txtName, txtPort;
-	JButton btnLogin, btnLogout, btnStart;
-	static int point = 0;//
-	int timeRemain = 20;//
-	int[] numberSelected = new int[25]; //
-	static int[] numberSelectedX = new int[25]; //
-	static int[] numberSelectedY = new int[25]; //
-	static int h = 0; //
+	JButton btnLogin, btnLogout, btnStart, btnNumber;
+	static int point = 0;
+	int[] numberSelected = new int[100]; 
+	static int[] numberSelectedX = new int[100]; 
+	static int[] numberSelectedY = new int[100]; 
+	static int h = 0;
 	static int groupMax = 0;
 	private int defaultPort;
 	private String defaultHost;
 	private boolean connected;
-	private Client client;
+	private static Client client;
 	public boolean startGame;
 
 	ClientGUI(String host, int port) {
 		super("Chat Client");
 		defaultPort = port;
 		defaultHost = host;
-		JPanel game = new JPanel(new GridLayout(5, 5));
+		JPanel game = new JPanel(new GridLayout(10, 10));
 		int k = 0;
 		ArrayList<Integer> array = new ArrayList<>();
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 100; i++) {
 			array.add(i + 1);
 		}
 		Collections.shuffle(array);
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < 10; i++)
+			for (int j = 0; j < 10; j++) {
 				x[i][j] = array.get(k);
 				k++;
 			}
-		button = new JButton[5][5];
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++) {
-				button[i][j] = new JButton(x[i][j] + "");
+		button = new JButton[10][10];
+		for (int i = 0; i < 10; i++)
+			for (int j = 0; j < 10; j++) {
+				button[i][j] = new JButton(" ");
 				game.add(button[i][j]);
 				button[i][j].setEnabled(false);
 				button[i][j].addActionListener(new BtnGameListener());
@@ -78,10 +76,8 @@ public class ClientGUI extends JFrame implements ActionListener {
 
 		JPanel textChat = new JPanel(new GridLayout(4, 1));
 		JPanel timeAndPoint = new JPanel(new GridLayout(1, 2));
-		labelTime = new JLabel("Time: " + timeRemain);
 		labelPoint = new JLabel("Point: " + point);
 		timeAndPoint.add(labelPoint);
-		timeAndPoint.add(labelTime);
 		textChat.add(timeAndPoint);
 		JPanel namePort = new JPanel(new GridLayout(1, 4));
 		labelName = new JLabel("Player Name");
@@ -95,7 +91,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 		textChat.add(namePort);
 		txtChat = new JTextField("");
 		textChat.add(txtChat);
-		JPanel loginLogout = new JPanel(new GridLayout(1, 3));
+		JPanel loginLogout = new JPanel(new GridLayout(1, 4));
 		btnLogin = new JButton("LOGIN");
 		btnLogin.addActionListener(this);
 		btnLogout = new JButton("LOGOUT");
@@ -103,9 +99,14 @@ public class ClientGUI extends JFrame implements ActionListener {
 		btnLogout.setEnabled(false);
 		btnStart = new JButton("START");
 		btnStart.addActionListener(this);
+		btnStart.setEnabled(false);
+		btnNumber = new JButton("NUMBER");
+		btnNumber.setEnabled(false);
+		btnNumber.addActionListener(this);
 		loginLogout.add(btnLogin);
 		loginLogout.add(btnLogout);
 		loginLogout.add(btnStart);
+		loginLogout.add(btnNumber);
 		textChat.add(loginLogout);
 		add(textChat, BorderLayout.SOUTH);
 
@@ -119,26 +120,26 @@ public class ClientGUI extends JFrame implements ActionListener {
 	public void GameEnable() {
 		int k = 0;
 		ArrayList<Integer> array = new ArrayList<>();
-		for (int i = 0; i < 25; i++) {
+		for (int i = 0; i < 100; i++) {
 			array.add(i + 1);
 		}
 		Collections.shuffle(array);
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < 10; i++)
+			for (int j = 0; j < 10; j++) {
 				x[i][j] = array.get(k);
 				k++;
 			}
 		point = 0;
 		labelPoint.setText("Point: " + point);
 		int h = 0;
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < 10; i++)
+			for (int j = 0; j < 10; j++) {
 				Integer num = x[i][j];
 				button[i][j].setText(num.toString());
 				button[i][j].setEnabled(true);
-				numberSelected[h] = 26;
-				numberSelectedX[h] = 26;
-				numberSelectedY[h] = 26;
+				numberSelected[h] = 101;
+				numberSelectedX[h] = 101;
+				numberSelectedY[h] = 101;
 				groupMax = 0;
 				h++;
 			}
@@ -149,32 +150,33 @@ public class ClientGUI extends JFrame implements ActionListener {
 		point = 0;
 		labelPoint.setText("Point: " + point);
 		int k = 0;
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++) {
+		for (int i = 0; i < 10; i++)
+			for (int j = 0; j < 10; j++) {
 				button[i][j].setEnabled(false);
-				numberSelected[k] = 26;
-				numberSelectedX[k] = 26;
-				numberSelectedY[k] = 26;
+				numberSelected[k] = 101;
+				numberSelectedX[k] = 101;
+				numberSelectedY[k] = 101;
 				groupMax = 0;
 				k++;
 			}
 
 	}
 
-	public void ButtonSelected(String x) {
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++) {
-				if (button[i][j].getText().equals(x)) {
+	public void ButtonSelected(int x) {
+		for (int i = 0; i < 10; i++)
+			for (int j = 0; j < 10; j++) {
+				if (Integer.parseInt(button[i][j].getText())==x) {
 					button[i][j].setEnabled(false);
-					numberSelected[h] = Integer.parseInt(x);
+					numberSelected[h] = x;
 					numberSelectedX[h] = i;
 					numberSelectedY[h] = j;
 					point = UpdatePoint(numberSelectedX[h], numberSelectedY[h]);
 					h++;
-					timeRemain = 20;
 					labelPoint.setText("Point: " + point);
-					if (point == 5)
-						Stop();
+					if (point == 5){
+						bingo();
+						h=0;
+					}					
 				}
 			}
 	}
@@ -264,11 +266,8 @@ public class ClientGUI extends JFrame implements ActionListener {
 		return groupMax;
 	}
 
-	public static void Stop() {
-		for (int i = 0; i < 5; i++)
-			for (int j = 0; j < 5; j++) {
-				button[i][j].setEnabled(false);
-			}
+	public static void bingo() {
+		client.sendMessage(new ChatMessage(ChatMessage.BINGO, "", 0));
 	}
 
 	void append(String str) {
@@ -277,24 +276,14 @@ public class ClientGUI extends JFrame implements ActionListener {
 	}
 
 	public static void main(String[] args) {
-		new ClientGUI("localhost", 8000);
+		new ClientGUI("localhost", 1500);
 
 	}
 
 	class BtnGameListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			for (int i = 0; i < 5; i++)
-				for (int j = 0; j < 5; j++) {
-					if (e.getSource() == button[i][j]) {
-						ButtonSelected(button[i][j].getText());
-						client.sendMessage(new ChatMessage(ChatMessage.NUMBER, button[i][j].getText()));
-						if(point == 5)
-						client.sendMessage(new ChatMessage(ChatMessage.WIN, ""));
-					}
-					
-
-				}
+			
 		}
 	}
 
@@ -302,13 +291,15 @@ public class ClientGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o == btnStart) {
-			client.sendMessage(new ChatMessage(ChatMessage.START, ""));
+			client.sendMessage(new ChatMessage(ChatMessage.START, "", 0));
 			return;
 		}
 		if (o == btnLogout) {
-			client.sendMessage(new ChatMessage(ChatMessage.LOGOUT, ""));
+			client.sendMessage(new ChatMessage(ChatMessage.LOGOUT, "", 0));
 			btnLogout.setEnabled(false);
 			btnLogin.setEnabled(true);
+			btnStart.setEnabled(false);
+			btnNumber.setEnabled(false);
 			txtName.setEditable(true);
 			txtPort.setEnabled(true);
 			client.disconnect();
@@ -316,16 +307,18 @@ public class ClientGUI extends JFrame implements ActionListener {
 			connected = false;
 			return;
 		}
+		if (o==btnNumber) {
+			client.sendMessage(new ChatMessage(ChatMessage.NUMBER, "", 0));
+			return;
+		}
+		
 		if (connected) {
-			// just have to send the message
-			client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, txtChat.getText()));
+			client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, txtChat.getText(), 0));
 			txtChat.setText("");
 			return;
 		}
 		if (o == btnLogin) {
-			// ok it is a connection request
 			String username = txtName.getText().trim();
-			// empty username ignore it
 			if (username.length() == 0)
 				return;
 			String portNumber = txtPort.getText().trim();
@@ -333,16 +326,16 @@ public class ClientGUI extends JFrame implements ActionListener {
 				return;
 			int port = 0;
 			port = Integer.parseInt(portNumber);
-			// try creating a new Client with GUI
 			client = new Client("localhost", port, username, this);
-			// test if we can start the Client
 			if (!client.start())
 				return;
+			client.sendMessage(new ChatMessage(ChatMessage.LOGIN, "", 0));
 			txtChat.setText("");
 			connected = true;
 			txtChat.addActionListener(this);
 			btnLogin.setEnabled(false);
 			btnLogout.setEnabled(true);
+			btnStart.setEnabled(true);
 			txtName.setEditable(false);
 			txtPort.setEnabled(false);
 		}
