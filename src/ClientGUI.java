@@ -1,8 +1,8 @@
 
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -15,8 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.SwingConstants;
 
 public class ClientGUI extends JFrame implements ActionListener {
 
@@ -46,18 +45,11 @@ public class ClientGUI extends JFrame implements ActionListener {
 		super("Chat Client");
 		defaultPort = port;
 		defaultHost = host;
+		
+		
+		JPanel project = new JPanel(new GridLayout(1, 2));
+		
 		JPanel game = new JPanel(new GridLayout(10, 10));
-		int k = 0;
-		ArrayList<Integer> array = new ArrayList<>();
-		for (int i = 0; i < 100; i++) {
-			array.add(i + 1);
-		}
-		Collections.shuffle(array);
-		for (int i = 0; i < 10; i++)
-			for (int j = 0; j < 10; j++) {
-				x[i][j] = array.get(k);
-				k++;
-			}
 		button = new JButton[10][10];
 		for (int i = 0; i < 10; i++)
 			for (int j = 0; j < 10; j++) {
@@ -66,53 +58,87 @@ public class ClientGUI extends JFrame implements ActionListener {
 				button[i][j].setEnabled(false);
 				button[i][j].addActionListener(new BtnGameListener());
 			}
-		add(game, BorderLayout.NORTH);
-
-		save = new JTextArea("Welcome to the Chat room\n", 80, 50);
-		JPanel chatRoom = new JPanel(new GridLayout(1, 1));
-		chatRoom.add(new JScrollPane(save));
+		
+		
+		JPanel chatRoom = new JPanel(new BorderLayout());
+		
+		save = new JTextArea("", 50, 30);
 		save.setEditable(false);
-		add(chatRoom, BorderLayout.CENTER);
-
-		JPanel textChat = new JPanel(new GridLayout(4, 1));
-		JPanel timeAndPoint = new JPanel(new GridLayout(1, 2));
-		labelPoint = new JLabel("Point: " + point);
-		timeAndPoint.add(labelPoint);
-		textChat.add(timeAndPoint);
-		JPanel namePort = new JPanel(new GridLayout(1, 4));
-		labelName = new JLabel("Player Name");
+		
+	
+		JPanel north = new JPanel (new GridLayout(5, 1));
+		JPanel name = new JPanel(new GridLayout(1, 2));
+		labelName = new JLabel("Player Name",SwingConstants.CENTER);
 		txtName = new JTextField("Player");
-		labelPort = new JLabel("Port");
+		name.add(labelName);
+		name.add(txtName);
+		
+		
+		JPanel setPort = new JPanel(new GridLayout(1, 2));
+		labelPort = new JLabel("Port",SwingConstants.CENTER);
 		txtPort = new JTextField("1500");
-		namePort.add(labelName);
-		namePort.add(txtName);
-		namePort.add(labelPort);
-		namePort.add(txtPort);
-		textChat.add(namePort);
-		txtChat = new JTextField("");
-		textChat.add(txtChat);
-		JPanel loginLogout = new JPanel(new GridLayout(1, 4));
+		setPort.add(labelPort);
+		setPort.add(txtPort);
+		
+		
+		JPanel loginLogout = new JPanel(new GridLayout(1, 5));
 		btnLogin = new JButton("LOGIN");
 		btnLogin.addActionListener(this);
 		btnLogout = new JButton("LOGOUT");
 		btnLogout.addActionListener(this);
 		btnLogout.setEnabled(false);
+		JLabel space5 = new JLabel("");
+		JLabel space6 = new JLabel("");
+		JLabel space7 = new JLabel("");
+		loginLogout.add(space5);
+		loginLogout.add(btnLogin);
+		loginLogout.add(space6);
+		loginLogout.add(btnLogout);
+		loginLogout.add(space7);
+		
+		
+		JLabel space1 = new JLabel("");
+		JLabel space2 = new JLabel("");
+		JLabel space8 = new JLabel("");
+		north.add(name);
+		north.add(setPort);
+		north.add(space2);
+		north.add(loginLogout);
+		north.add(space8);
+		
+		
+		JPanel south = new JPanel(new GridLayout(6, 1));
+		JLabel space3 = new JLabel("");
+		south.add(space3);
+		labelPoint = new JLabel("Chuỗi dài nhất đang có: " + point, SwingConstants.CENTER);
+		south.add(labelPoint);
+		txtChat = new JTextField("");
+		south.add(txtChat);
+		JLabel space4 = new JLabel("");
+		south.add(space4);	
+		JPanel play = new JPanel(new GridLayout(1, 2, 5, 5));
 		btnStart = new JButton("START");
 		btnStart.addActionListener(this);
 		btnStart.setEnabled(false);
 		btnNumber = new JButton("NUMBER");
 		btnNumber.setEnabled(false);
 		btnNumber.addActionListener(this);
-		loginLogout.add(btnLogin);
-		loginLogout.add(btnLogout);
-		loginLogout.add(btnStart);
-		loginLogout.add(btnNumber);
-		textChat.add(loginLogout);
-		add(textChat, BorderLayout.SOUTH);
+		play.add(btnStart);
+		play.add(btnNumber);
+		south.add(play);
+		south.add(space1);
+		
+		
+		chatRoom.add(new JScrollPane(save),BorderLayout.CENTER);
+		chatRoom.add(north, BorderLayout.NORTH);
+		chatRoom.add(south, BorderLayout.SOUTH);
+		project.add(game);
+		project.add(chatRoom);
+		add(project);
 
-		//
+		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(600, 600);
+		setSize(1000, 500);
 		setVisible(true);
 		txtChat.requestFocus();
 	}
@@ -121,7 +147,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 		int k = 0;
 		ArrayList<Integer> array = new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
-			array.add(i + 1);
+			array.add(i);
 		}
 		Collections.shuffle(array);
 		for (int i = 0; i < 10; i++)
@@ -135,6 +161,7 @@ public class ClientGUI extends JFrame implements ActionListener {
 		for (int i = 0; i < 10; i++)
 			for (int j = 0; j < 10; j++) {
 				Integer num = x[i][j];
+				button[i][j].setBackground(Color.GREEN);
 				button[i][j].setText(num.toString());
 				button[i][j].setEnabled(true);
 				numberSelected[h] = 101;
@@ -166,7 +193,8 @@ public class ClientGUI extends JFrame implements ActionListener {
 		for (int i = 0; i < 10; i++)
 			for (int j = 0; j < 10; j++) {
 				if (Integer.parseInt(button[i][j].getText())==x) {
-					button[i][j].setEnabled(false);
+					button[i][j].setBackground(Color.RED);
+					button[i][j].setForeground(Color.WHITE);
 					numberSelected[h] = x;
 					numberSelectedX[h] = i;
 					numberSelectedY[h] = j;

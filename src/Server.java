@@ -21,7 +21,7 @@ public class Server {
 	public void random() {
 		ArrayList<Integer> array = new ArrayList<>();
 		for (int i = 0; i < 100; i++) {
-			array.add(i + 1);
+			array.add(i);
 		}
 		Collections.shuffle(array);
 		for(int i=0;i<100;i++){
@@ -34,7 +34,7 @@ public class Server {
 		try {
 			ServerSocket serverSocket = new ServerSocket(port);
 			while (keepGoing) {
-				display("Server sẵn sàng tại port: " + port + ".");
+				display("Server sÄƒÌƒn saÌ€ng taÌ£i port: " + port + ".");
 				Socket socket = serverSocket.accept();
 				if (!keepGoing)
 					break;
@@ -87,7 +87,7 @@ public class Server {
 
 			if (!ct.writeMsg(new ChatMessage(message.getType(), messageLf, message.getNumber()))) {
 				al.remove(i);
-				display("Chấm dứt kết nối với " + ct.username);
+				display("ChÃ¢Ì�m dÆ°Ì�t kÃªÌ�t nÃ´Ì�i vÆ¡Ì�i " + ct.username);
 			}
 		}
 	}
@@ -129,7 +129,7 @@ public class Server {
 				sInput = new ObjectInputStream(socket.getInputStream());
 
 				username = (String) sInput.readObject();
-				display(username + " đã tham gia");
+				display(username + " Ä‘aÌƒ tham gia");
 			} catch (IOException e) {
 				display(e.getMessage());
 				return;
@@ -160,13 +160,13 @@ public class Server {
 				switch (cm.getType()) {
 				
 				case ChatMessage.LOGIN:
-					broadcast(new ChatMessage(ChatMessage.MESSAGE, "Chào mừng "+username + " đã tham gia" + message, 0));
+					broadcast(new ChatMessage(ChatMessage.MESSAGE, "ChaÌ€o mÆ°Ì€ng "+username + " Ä‘aÌƒ tham gia" + message, 0));
 					break;
 				case ChatMessage.MESSAGE:
 					broadcast(new ChatMessage(ChatMessage.MESSAGE, username + ": " + message, 0));
 					break;
 				case ChatMessage.LOGOUT:
-					broadcast(new ChatMessage(ChatMessage.MESSAGE, username + " đã thoát khỏi trò chơi", 0));
+					broadcast(new ChatMessage(ChatMessage.MESSAGE, username + " Ä‘aÌƒ thoaÌ�t khoÌ‰i troÌ€ chÆ¡i", 0));
 					keepGoing = false;
 					break;
 				case ChatMessage.START:
@@ -178,7 +178,7 @@ public class Server {
 					break;
 				case ChatMessage.NUMBER:
 					broadcast(new ChatMessage(ChatMessage.NUMBER, "", num[k]));
-					broadcast(new ChatMessage(ChatMessage.MESSAGE, "Số " + num[k], 0));
+					broadcast(new ChatMessage(ChatMessage.MESSAGE, "SÃ´Ì� " + num[k], 0));
 					k++;
 					break;
 				case ChatMessage.BINGO:
